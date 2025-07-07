@@ -1,24 +1,40 @@
+<!-- Modified sidebar.html for HRM Layout -->
 @if (showHeader) {
-  <div class="matero-sidebar-header">
-    <mat-toolbar>
-      <app-branding [showName]="!toggleChecked" />
+  <div class="matero-sidebar-header hrm-header">
+    <mat-toolbar class="hrm-toolbar">
+      <!-- HRM Title -->
+      <div class="hrm-title">HRM</div>
+
+      <!-- Navigation Dropdowns -->
+
 
       <span class="flex-fill"></span>
 
       @if (showToggle) {
-        <mat-slide-toggle hideIcon [checked]="toggleChecked" (change)="toggleCollapsed.emit()" />
-      } @else {
-        <button mat-icon-button (click)="closeSidenav.emit()">
-          <mat-icon>close</mat-icon>
-        </button>
+
       }
     </mat-toolbar>
   </div>
 }
 
-<div class="matero-sidebar-main">
-  @if (showUser) {
-    <app-user-panel />
-  }
-  <app-sidemenu [ripple]="showToggle" />
+<div class="matero-sidebar-main hrm-sidebar-main">
+  <!-- HRM Custom Menu instead of default sidemenu -->
+  <div class="hrm-menu">
+    <div class="menu-item" [class.active]="activeMenuItem === 'admin'">
+      <button class="menu-button admin-btn"
+              [class.active]="activeMenuItem === 'admin'"
+              (click)="onMenuItemClick('admin')">
+        Admin
+      </button>
+    </div>
+    <div class="menu-item" [class.active]="activeMenuItem === 'templates'">
+      <button class="menu-button"
+              [class.active]="activeMenuItem === 'templates'"
+              (click)="onMenuItemClick('templates')">
+        Templates
+      </button>
+    </div>
+  </div>
+
+
 </div>

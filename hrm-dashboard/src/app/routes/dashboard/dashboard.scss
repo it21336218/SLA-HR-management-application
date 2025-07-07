@@ -1,0 +1,350 @@
+// dashboard.component.scss
+.dashboard-container {
+  padding: 20px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+// HRM Header Section
+.hrm-header-section {
+  margin-bottom: 20px;
+
+  .hrm-dropdowns {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+
+    .dropdown-group {
+      .hrm-select {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 10px 15px;
+        font-size: 14px;
+        color: #333;
+        cursor: pointer;
+        min-width: 180px;
+        transition: all 0.3s ease;
+
+        &:hover {
+          border-color: #ff9800;
+        }
+
+        &:focus {
+          outline: none;
+          border-color: #ff9800;
+          box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
+        }
+      }
+    }
+  }
+}
+
+// System Users Section
+.system-users-section {
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .header-actions {
+      .btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+
+        &.btn-primary {
+          background: #ff9800;
+          color: white;
+
+          &:hover {
+            background: #f57c00;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
+          }
+        }
+
+        mat-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
+  }
+}
+
+// Users Panel
+.users-panel {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+
+  // Users Toolbar
+  .users-toolbar {
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .search-field,
+    .filter-field {
+      min-width: 250px;
+
+      .mat-mdc-form-field-wrapper {
+        padding-bottom: 0;
+      }
+    }
+
+    .search-field {
+      flex: 1;
+    }
+  }
+
+  // Users Table Container
+  .users-table-container {
+    .users-table {
+      width: 100%;
+
+      // Table Headers
+      .mat-mdc-header-row {
+        background: #fafafa;
+
+        .mat-mdc-header-cell {
+          font-weight: 600;
+          color: #555;
+          border-bottom: 1px solid #e0e0e0;
+        }
+      }
+
+      // Table Rows
+      .mat-mdc-row {
+        &:hover {
+          background: #f8f9fa;
+        }
+
+        .mat-mdc-cell {
+          border-bottom: 1px solid #f0f0f0;
+          padding: 16px 12px;
+
+          // User Avatar
+          .user-avatar {
+            .avatar-img {
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              object-fit: cover;
+              border: 2px solid #f0f0f0;
+            }
+          }
+
+          // User Info
+          .user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            .user-name {
+              font-weight: 500;
+              color: #333;
+            }
+
+            .user-status {
+              font-size: 12px;
+              padding: 2px 8px;
+              border-radius: 12px;
+              font-weight: 500;
+
+              &.status-active {
+                background: #e8f5e8;
+                color: #2e7d32;
+              }
+
+              &.status-inactive {
+                background: #fff3e0;
+                color: #f57c00;
+              }
+
+              &.status-suspended {
+                background: #ffebee;
+                color: #d32f2f;
+              }
+            }
+          }
+
+          // Role Badge
+          .role-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+
+            &.role-admin {
+              background: #e3f2fd;
+              color: #1976d2;
+            }
+
+            &.role-manager {
+              background: #f3e5f5;
+              color: #7b1fa2;
+            }
+
+            &.role-employee {
+              background: #e8f5e8;
+              color: #388e3c;
+            }
+          }
+
+          // Action Buttons
+          .action-buttons {
+            display: flex;
+            gap: 4px;
+
+            .mat-mdc-icon-button {
+              width: 36px;
+              height: 36px;
+
+              .mat-icon {
+                font-size: 18px;
+                width: 18px;
+                height: 18px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Pagination
+    .mat-mdc-paginator {
+      border-top: 1px solid #f0f0f0;
+      background: #fafafa;
+    }
+  }
+
+  // Empty State
+  .empty-state {
+    padding: 60px 20px;
+    text-align: center;
+    color: #666;
+
+    .empty-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      color: #ddd;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      margin: 0 0 8px 0;
+      font-size: 20px;
+      color: #333;
+    }
+
+    p {
+      margin: 0 0 20px 0;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .mat-mdc-raised-button {
+      .mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 16px;
+  }
+
+  .hrm-header-section {
+    .hrm-dropdowns {
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+
+      .dropdown-group {
+        .hrm-select {
+          width: 100%;
+          min-width: auto;
+        }
+      }
+    }
+  }
+
+  .system-users-section {
+    .section-header {
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+
+      .header-actions {
+        .btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    }
+  }
+
+  .users-panel {
+    .users-toolbar {
+      flex-direction: column;
+      align-items: stretch;
+
+      .search-field,
+      .filter-field {
+        min-width: auto;
+        width: 100%;
+      }
+    }
+
+    .users-table-container {
+      overflow-x: auto;
+
+      .users-table {
+        min-width: 600px;
+      }
+    }
+  }
+}
+
+// Animation
+.users-panel {
+  animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

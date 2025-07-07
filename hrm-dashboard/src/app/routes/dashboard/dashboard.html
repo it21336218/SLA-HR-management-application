@@ -1,1 +1,176 @@
-<page-header />
+<!-- dashboard.component.html -->
+<div class="dashboard-container">
+  <!-- HRM Header with Dropdowns -->
+  <div class="hrm-header-section">
+    <div class="hrm-dropdowns">
+      <div class="dropdown-group">
+        <select class="hrm-select" [(ngModel)]="selectedUserManagement" (change)="onUserManagementChange()">
+          <option value="user-management">User Management</option>
+          <option value="employee-management">Employee Management</option>
+          <option value="department-management">Department Management</option>
+        </select>
+      </div>
+      <div class="dropdown-group">
+        <select class="hrm-select" [(ngModel)]="selectedUserRole" (change)="onUserRoleChange()">
+          <option value="user-roles">User Roles</option>
+          <option value="admin">Admin</option>
+          <option value="manager">Manager</option>
+          <option value="employee">Employee</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- System Users Section -->
+  <div class="system-users-section">
+    <div class="section-header">
+      <h2>System Users</h2>
+      <div class="header-actions">
+        <button class="btn btn-primary" (click)="addUser()">
+          <mat-icon>add</mat-icon>
+          Add User
+        </button>
+      </div>
+    </div>
+
+    <!-- Users Content Panel -->
+    <div class="users-panel">
+      <!-- Search and Filters -->
+      <div class="users-toolbar">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search users...</mat-label>
+          <input matInput [(ngModel)]="searchTerm" (keyup)="filterUsers()" placeholder="Search by name, email, or role">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Filter by Role</mat-label>
+          <mat-select [(ngModel)]="selectedRoleFilter" (selectionChange)="filterUsers()">
+            <mat-option value="">All Roles</mat-option>
+            <mat-option value="Admin">Admin</mat-option>
+            <mat-option value="Manager">Manager</mat-option>
+            <mat-option value="Employee">Employee</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Users Table -->
+      <div class="users-table-container" *ngIf="filteredUsers.length > 0">
+        <table mat-table [dataSource]="filteredUsers" class="users-table">
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let user">{{user.id}}</td>
+          </ng-container>
+
+          <!-- Avatar Column -->
+          <ng-container matColumnDef="avatar">
+            <th mat-header-cell *matHeaderCellDef>Avatar</th>
+            <td mat-cell *matCellDef="let user">
+              <div class="user-avatar">
+                <img [src]="user.avatar || '/assets/images/default-avatar.png'"
+                     [alt]="user.name"
+                     class="avatar-img">
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let user">
+              <div class="user-info">
+                <span class="user-name">{{user.name}}</span>
+                <span class="user-status" [class]="'status-' + user.status.toLowerCase()">
+                  {{user.status}}
+                </span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Email Column -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let user">{{user.email}}</td>
+          </ng-container>
+
+          <!-- Role Column -->
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef>Role</th>
+            <td mat-cell *matCellDef="let user">
+              <span class="role-badge" [class]="'role-' + user.role.toLowerCase()">
+                {{user.role}}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Department Column -->
+          <ng-container matColumnDef="department">
+            <th mat-header-cell *matHeaderCellDef>Department</th>
+            <td mat-cell *matCellDef="let user">{{user.department}}</td>
+          </ng-container>
+
+          <!-- Last Login Column -->
+          <ng-container matColumnDef="lastLogin">
+            <th mat-header-cell *matHeaderCellDef>Last Login</th>
+            <td mat-cell *matCellDef="let user">{{user.lastLogin | date:'short'}}</td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let user">
+              <div class="action-buttons">
+                <button mat-icon-button
+                        color="primary"
+                        matTooltip="View Details"
+                        (click)="viewUser(user.id)">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button
+                        color="accent"
+                        matTooltip="Edit User"
+                        (click)="editUser(user.id)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button
+                        color="warn"
+                        matTooltip="Delete User"
+                        (click)="deleteUser(user.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <!-- Pagination -->
+        <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]"
+                       [pageSize]="pageSize"
+                       [length]="totalUsers"
+                       (page)="onPageChange($event)"
+                       showFirstLastButtons>
+        </mat-paginator>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="filteredUsers.length === 0">
+        <mat-icon class="empty-icon">group</mat-icon>
+        <h3>No Users Found</h3>
+        <p *ngIf="searchTerm || selectedRoleFilter">
+          Try adjusting your search criteria or filters.
+        </p>
+        <p *ngIf="!searchTerm && !selectedRoleFilter">
+          No users have been added yet. Click "Add User" to create your first user.
+        </p>
+        <button mat-raised-button color="primary" (click)="addUser()">
+          <mat-icon>add</mat-icon>
+          Add First User
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,60 @@
+// Modified sidebar.scss for HRM Layout
 @use '../../../styles/grid/breakpoints';
 
+// HRM Header Styles
+.matero-sidebar-header.hrm-header {
+  overflow: visible;
+  background: #ff9800;
+
+  .hrm-toolbar {
+    background: #ff9800 !important;
+    color: rgb(255, 147, 53);
+    width: 100%;
+    height: 60px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+
+    .hrm-title {
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      margin-right: 40px;
+      letter-spacing: 1px;
+    }
+
+    .hrm-nav {
+      display: flex;
+      gap: 20px;
+
+      .nav-dropdown {
+        position: relative;
+
+        .nav-select {
+          background: rgba(255,255,255,0.9);
+          border: 1px solid rgba(255,255,255,0.3);
+          border-radius: 4px;
+          padding: 8px 12px;
+          font-size: 14px;
+          color: #333;
+          cursor: pointer;
+          min-width: 150px;
+
+          &:hover {
+            background: white;
+          }
+
+          &:focus {
+            outline: none;
+            border-color: rgba(255,255,255,0.8);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Override default header styles when HRM mode is active
 .matero-sidebar-header {
   overflow: hidden;
 
@@ -14,7 +69,65 @@
   }
 }
 
-.matero-sidebar-main {
+// HRM Sidebar Main
+.matero-sidebar-main.hrm-sidebar-main {
+  height: calc(100% - 60px); // Adjust for HRM header height
+  padding: 20px 0;
+  overflow: auto;
+  scrollbar-width: none;
+  background: white;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+
+  // HRM Custom Menu
+  .hrm-menu {
+    .menu-item {
+      margin-bottom: 8px;
+
+      .menu-button {
+        width: 100%;
+        padding: 12px 20px;
+        border: none;
+        background: transparent;
+        text-align: left;
+        font-size: 14px;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: #f5f5f5;
+          color: #333;
+        }
+
+        &.admin-btn.active {
+          background: #ff9800;
+          color: white;
+          font-weight: 500;
+
+          &:hover {
+            background: #f57c00;
+          }
+        }
+      }
+
+      &.active .menu-button:not(.admin-btn) {
+        background: #f5f5f5;
+        color: #ff9800;
+        font-weight: 500;
+      }
+    }
+  }
+
+  @include breakpoints.bp-lt(small) {
+    & {
+      height: calc(100% - 60px); // Keep same height on mobile
+    }
+  }
+}
+
+// Default sidebar main (keep existing functionality)
+.matero-sidebar-main:not(.hrm-sidebar-main) {
   height: calc(100% - var(--mat-toolbar-standard-height));
   padding: 0 0.5rem 0.5rem;
   overflow: auto;
@@ -23,6 +136,55 @@
   @include breakpoints.bp-lt(small) {
     & {
       height: calc(100% - var(--mat-toolbar-mobile-height));
+    }
+  }
+}
+
+// Responsive Design for HRM Layout
+@media (max-width: 768px) {
+  .matero-sidebar-header.hrm-header {
+    .hrm-toolbar {
+      flex-direction: column;
+      height: auto;
+      padding: 15px;
+
+      .hrm-title {
+        margin-bottom: 10px;
+        margin-right: 0;
+      }
+
+      .hrm-nav {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+
+        .nav-dropdown {
+          width: 100%;
+
+          .nav-select {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  .matero-sidebar-main.hrm-sidebar-main {
+    .hrm-menu {
+      display: flex;
+      overflow-x: auto;
+      padding: 0 10px;
+
+      .menu-item {
+        flex-shrink: 0;
+        margin-bottom: 0;
+        margin-right: 8px;
+
+        .menu-button {
+          white-space: nowrap;
+          min-width: 80px;
+        }
+      }
     }
   }
 }
