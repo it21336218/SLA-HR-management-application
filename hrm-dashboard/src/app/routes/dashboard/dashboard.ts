@@ -1,7 +1,7 @@
 // dashboard.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,8 @@ interface User {
   avatar?: string;
   lastLogin: Date;
   createdAt: Date;
+  phoneNumber?: string;
+  address?: string;
 }
 
 @Component({
@@ -29,6 +31,7 @@ interface User {
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     MatTableModule,
     MatPaginatorModule,
     MatButtonModule,
@@ -59,6 +62,11 @@ export class DashboardComponent implements OnInit {
   totalUsers = 0;
   currentPage = 0;
 
+  // Edit dialog properties
+  showEditDialog = false;
+  editUserForm!: FormGroup;
+  selectedUser: User | null = null;
+
   // Sample user data
   allUsers: User[] = [
     {
@@ -70,7 +78,9 @@ export class DashboardComponent implements OnInit {
       status: 'Active',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
       lastLogin: new Date('2024-01-15T10:30:00'),
-      createdAt: new Date('2023-06-01')
+      createdAt: new Date('2023-06-01'),
+      phoneNumber: '+1 (555) 123-4567',
+      address: '123 Main St, City, State 12345'
     },
     {
       id: 3,
@@ -81,7 +91,9 @@ export class DashboardComponent implements OnInit {
       status: 'Active',
       avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
       lastLogin: new Date('2024-01-13T09:15:00'),
-      createdAt: new Date('2023-08-20')
+      createdAt: new Date('2023-08-20'),
+      phoneNumber: '+1 (555) 234-5678',
+      address: '456 Oak Ave, City, State 12345'
     },
     {
       id: 4,
@@ -92,7 +104,9 @@ export class DashboardComponent implements OnInit {
       status: 'Active',
       avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
       lastLogin: new Date('2024-01-12T14:20:00'),
-      createdAt: new Date('2023-09-10')
+      createdAt: new Date('2023-09-10'),
+      phoneNumber: '+1 (555) 345-6789',
+      address: '789 Pine St, City, State 12345'
     },
     {
       id: 5,
@@ -103,7 +117,9 @@ export class DashboardComponent implements OnInit {
       status: 'Inactive',
       avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
       lastLogin: new Date('2024-01-10T11:30:00'),
-      createdAt: new Date('2023-10-05')
+      createdAt: new Date('2023-10-05'),
+      phoneNumber: '+1 (555) 456-7890',
+      address: '321 Elm St, City, State 12345'
     },
     {
       id: 6,
@@ -114,16 +130,34 @@ export class DashboardComponent implements OnInit {
       status: 'Active',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
       lastLogin: new Date('2024-01-11T16:45:00'),
-      createdAt: new Date('2023-11-12')
+      createdAt: new Date('2023-11-12'),
+      phoneNumber: '+1 (555) 567-8901',
+      address: '654 Maple Dr, City, State 12345'
     }
   ];
 
   filteredUsers: User[] = [];
 
-  constructor() { }
+  constructor(private fb: FormBuilder) {
+    this.initializeEditForm();
+  }
 
   ngOnInit(): void {
     this.filterUsers();
+  }
+
+  // Initialize the edit form
+  initializeEditForm(): void {
+    this.editUserForm = this.fb.group({
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      role: ['', Validators.required],
+      department: ['', Validators.required],
+      status: ['Active'],
+      phoneNumber: [''],
+      address: ['']
+    });
   }
 
   // HRM Dropdown handlers
@@ -230,12 +264,74 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  // Edit user method - opens the dialog
   editUser(userId: number): void {
     console.log('Edit user:', userId);
-    const user = this.allUsers.find(u => u.id === userId);
-    if (user) {
-      // TODO: Open edit user dialog or navigate to edit user page
-      alert(`Editing user: ${user.name}`);
+    this.selectedUser = this.allUsers.find(u => u.id === userId) || null;
+
+    if (this.selectedUser) {
+      // Split the name into first and last name
+      const nameParts = this.selectedUser.name.split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+
+      // Populate the form with user data
+      this.editUserForm.patchValue({
+        firstName: firstName,
+        lastName: lastName,
+        email: this.selectedUser.email,
+        role: this.selectedUser.role,
+        department: this.selectedUser.department,
+        status: this.selectedUser.status,
+        phoneNumber: this.selectedUser.phoneNumber || '',
+        address: this.selectedUser.address || ''
+      });
+
+      // Show the dialog
+      this.showEditDialog = true;
+    }
+  }
+
+  // Close edit dialog
+  closeEditDialog(): void {
+    this.showEditDialog = false;
+    this.selectedUser = null;
+    this.editUserForm.reset();
+  }
+
+  // Update user method
+  updateUser(): void {
+    if (this.editUserForm.valid && this.selectedUser) {
+      const formValue = this.editUserForm.value;
+
+      // Update the user object
+      this.selectedUser.name = `${formValue.firstName} ${formValue.lastName}`.trim();
+      this.selectedUser.email = formValue.email;
+      this.selectedUser.role = formValue.role;
+      this.selectedUser.department = formValue.department;
+      this.selectedUser.status = formValue.status;
+      this.selectedUser.phoneNumber = formValue.phoneNumber;
+      this.selectedUser.address = formValue.address;
+
+      // Update the user in your main users array
+      const userIndex = this.allUsers.findIndex(user => user.id === this.selectedUser!.id);
+      if (userIndex !== -1) {
+        this.allUsers[userIndex] = { ...this.selectedUser };
+      }
+
+      // Refresh the filtered users
+      this.filterUsers();
+
+      // Close the dialog
+      this.closeEditDialog();
+
+      // Show success message
+      this.showSuccessMessage('User updated successfully!');
+    } else {
+      // Mark all fields as touched to show validation errors
+      Object.keys(this.editUserForm.controls).forEach(key => {
+        this.editUserForm.get(key)?.markAsTouched();
+      });
     }
   }
 
@@ -246,6 +342,14 @@ export class DashboardComponent implements OnInit {
       this.allUsers = this.allUsers.filter(u => u.id !== userId);
       this.filterUsers();
     }
+  }
+
+  // Success message method
+  showSuccessMessage(message: string): void {
+    // You can implement your preferred notification method here
+    // For example, using a toast notification or snackbar
+    console.log(message);
+    alert(message); // Temporary - replace with proper notification
   }
 
   // Utility methods

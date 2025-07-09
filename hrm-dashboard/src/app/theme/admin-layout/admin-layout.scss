@@ -1,15 +1,16 @@
 @use '@angular/material' as mat;
 @use '../../../styles/grid/breakpoints';
 
-// Keep existing ng-matero styles
 .matero-container-wrap,
 .matero-container {
   --mat-sidenav-content-background-color: transparent;
+
   height: 100%;
 }
 
 .matero-sidenav {
   --mat-sidenav-container-width: var(--sidenav-width);
+
   position: absolute;
   overflow-x: hidden;
   border-width: 0 !important;
@@ -34,6 +35,7 @@
   }
 }
 
+// Layout control
 .matero-sidenav-collapsed,
 .matero-sidenav-collapsed-fix {
   .matero-sidenav {
@@ -77,6 +79,7 @@
   }
 }
 
+// Layout control
 .matero-sidenav-collapsed {
   .matero-content {
     margin-left: var(--sidenav-collapsed-width) !important;
@@ -93,6 +96,7 @@
   }
 }
 
+// Layout control
 .matero-navbar-top {
   .matero-topmenu {
     top: 0;
@@ -108,6 +112,7 @@
   }
 }
 
+// Layout control
 .matero-header-fixed {
   .matero-header {
     position: sticky;
@@ -125,6 +130,7 @@
   }
 }
 
+// Fix the init content width
 .matero-content-width-fix {
   .matero-content {
     margin-left: var(--sidenav-width) !important;
@@ -144,329 +150,5 @@
   .matero-header-above &,
   .matero-navbar-top & {
     padding-top: 0;
-  }
-}
-
-// ==========================
-// FIXED HRM LAYOUT STYLES
-// ==========================
-
-.hrm-layout-wrapper {
-  display: flex;
-  height: 100vh;
-  background: #f5f5f5;
-  overflow: hidden;
-}
-
-// HRM Sidebar Container (Fixed Left)
-.hrm-sidebar-container {
-  width: 280px;
-  background: white;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  transition: width 0.3s ease;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-  margin-right: 2px;
-
-  &.collapsed {
-    width: 70px;
-
-    .hrm-nav-section,
-    .menu-text {
-      display: none;
-    }
-
-    .hrm-title {
-      font-size: 16px;
-    }
-
-    .menu-button {
-      justify-content: center;
-      padding: 12px;
-
-      mat-icon {
-        margin-right: 0;
-      }
-    }
-  }
-
-  // HRM Sidebar Header
-  .hrm-sidebar-header {
-    background: #ff9800;
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 60px;
-
-    .hrm-title {
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-      letter-spacing: 1px;
-      transition: font-size 0.3s ease;
-    }
-
-    .sidebar-toggle {
-      color: white;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
-      }
-    }
-  }
-
-  // HRM Navigation Section
-  .hrm-nav-section {
-    padding: 20px;
-    border-bottom: 1px solid #f0f0f0;
-
-    &.hidden {
-      display: none;
-    }
-
-    .nav-dropdown {
-      margin-bottom: 12px;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      .nav-select {
-        width: 100%;
-        background: #f8f9fa;
-        border: 1px solid #e9ecef;
-        border-radius: 6px;
-        padding: 10px 12px;
-        font-size: 14px;
-        color: #333;
-        cursor: pointer;
-        transition: all 0.3s ease;
-
-        &:hover {
-          border-color: #ff9800;
-          background: white;
-        }
-
-        &:focus {
-          outline: none;
-          border-color: #ff9800;
-          box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
-        }
-      }
-    }
-  }
-
-  // HRM Menu Section
-  .hrm-menu-section {
-    flex: 1;
-    padding: 20px 0;
-
-    &.hidden {
-      display: none;
-    }
-
-    .menu-item {
-      margin-bottom: 8px;
-      padding: 0 20px;
-
-      .menu-button {
-        width: 100%;
-        padding: 12px 16px;
-        border: none;
-        background: transparent;
-        text-align: left;
-        font-size: 14px;
-        color: #666;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-
-        mat-icon {
-          margin-right: 12px;
-          font-size: 20px;
-          width: 20px;
-          height: 20px;
-        }
-
-        .menu-text {
-          transition: opacity 0.3s ease;
-        }
-
-        &:hover {
-          background: #f5f5f5;
-          color: #333;
-        }
-
-        &.admin-btn.active {
-          background: #ff9800;
-          color: white;
-          font-weight: 500;
-
-          &:hover {
-            background: #f57c00;
-          }
-        }
-
-        &.active:not(.admin-btn) {
-          background: #fff3e0;
-          color: #ff9800;
-          font-weight: 500;
-        }
-      }
-    }
-  }
-}
-
-// HRM Main Container
-.hrm-main-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  margin-left: 0;
-  transition: margin-left 0.3s ease;
-
-  &.sidebar-collapsed {
-    margin-left: 0;
-  }
-
-  // Top Header Bar
-  .hrm-top-header {
-    background: white;
-    border-bottom: 1px solid #e0e0e0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 100;
-
-    .matero-header {
-      mat-toolbar {
-        background: white !important;
-        color: #333 !important;
-        height: 64px;
-        padding: 0 20px;
-
-        .mat-icon-button {
-          color: #666 !important;
-
-          &:hover {
-            background: rgba(0, 0, 0, 0.05) !important;
-          }
-        }
-
-        .mat-icon {
-          color: #666 !important;
-        }
-      }
-    }
-  }
-
-  // Content Area
-  .hrm-content-area {
-    flex: 1;
-    overflow: auto;
-    background: #f5f5f5;
-  }
-}
-
-// Sidebar Notice Overlay
-.sidebar-notice-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 2000;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-
-  &.open {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .sidebar-notice-panel {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 320px;
-    height: 100%;
-    background: white;
-    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
-
-    .close-notice {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 1;
-    }
-  }
-
-  &.open .sidebar-notice-panel {
-    transform: translateX(0);
-  }
-}
-
-// Responsive Design
-@media (max-width: 768px) {
-  .hrm-layout-wrapper {
-    flex-direction: column;
-  }
-
-  .hrm-sidebar-container {
-    width: 100%;
-    height: auto;
-    border-radius: 0;
-    border-bottom: 1px solid #e0e0e0;
-
-    &.collapsed {
-      width: 100%;
-      height: 60px;
-
-      .hrm-nav-section,
-      .hrm-menu-section {
-        display: none !important;
-      }
-    }
-
-    .hrm-sidebar-header {
-      .hrm-title {
-        font-size: 20px;
-      }
-    }
-
-    .hrm-nav-section {
-      .nav-dropdown {
-        .nav-select {
-          font-size: 16px;
-          padding: 12px;
-        }
-      }
-    }
-  }
-
-  .hrm-main-container {
-    margin-left: 0 !important;
-  }
-}
-
-// Animation
-.hrm-layout-wrapper {
-  animation: fadeIn 0.5s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
   }
 }

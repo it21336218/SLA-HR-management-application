@@ -173,4 +173,131 @@
       </div>
     </div>
   </div>
+
+  <!-- Edit User Dialog -->
+  <div class="edit-dialog-overlay" *ngIf="showEditDialog" (click)="closeEditDialog()">
+    <div class="edit-dialog" (click)="$event.stopPropagation()">
+      <div class="edit-dialog-header">
+        <h3>
+          <mat-icon>person_outline</mat-icon>
+          Edit User
+        </h3>
+        <button mat-icon-button (click)="closeEditDialog()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="edit-dialog-content">
+        <form [formGroup]="editUserForm" (ngSubmit)="updateUser()">
+          <div class="form-row">
+            <!-- Avatar Section -->
+            <div class="avatar-section">
+              <div class="avatar-container">
+                <img [src]="selectedUser?.avatar || '/assets/images/default-avatar.png'"
+                     [alt]="selectedUser?.name"
+                     class="edit-avatar">
+                <div class="avatar-overlay">
+                  <mat-icon>camera_alt</mat-icon>
+                </div>
+              </div>
+              <button type="button" mat-button color="primary" class="change-photo-btn">
+                <mat-icon>photo_camera</mat-icon>
+                Change Photo
+              </button>
+            </div>
+
+            <!-- Form Fields -->
+            <div class="form-fields">
+              <div class="form-group-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>First Name</mat-label>
+                  <input matInput formControlName="firstName" placeholder="Enter first name">
+                  <mat-error *ngIf="editUserForm.get('firstName')?.hasError('required')">
+                    First name is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Last Name</mat-label>
+                  <input matInput formControlName="lastName" placeholder="Enter last name">
+                  <mat-error *ngIf="editUserForm.get('lastName')?.hasError('required')">
+                    Last name is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="outline" class="form-field full-width">
+                <mat-label>Email Address</mat-label>
+                <input matInput formControlName="email" placeholder="Enter email address">
+                <mat-error *ngIf="editUserForm.get('email')?.hasError('required')">
+                  Email is required
+                </mat-error>
+                <mat-error *ngIf="editUserForm.get('email')?.hasError('email')">
+                  Please enter a valid email address
+                </mat-error>
+              </mat-form-field>
+
+              <div class="form-group-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Role</mat-label>
+                  <mat-select formControlName="role">
+                    <mat-option value="">Select Role</mat-option>
+                    <mat-option value="Admin">Admin</mat-option>
+                    <mat-option value="Manager">Manager</mat-option>
+                    <mat-option value="Employee">Employee</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="editUserForm.get('role')?.hasError('required')">
+                    Please select a role
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Department</mat-label>
+                  <mat-select formControlName="department">
+                    <mat-option value="">Select Department</mat-option>
+                    <mat-option value="IT">IT Department</mat-option>
+                    <mat-option value="Sales">Sales</mat-option>
+                    <mat-option value="Marketing">Marketing</mat-option>
+                    <mat-option value="Finance">Finance</mat-option>
+                    <mat-option value="Operations">Operations</mat-option>
+                    <mat-option value="HR">Human Resources</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="editUserForm.get('department')?.hasError('required')">
+                    Please select a department
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-group-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Status</mat-label>
+                  <mat-select formControlName="status">
+                    <mat-option value="Active">Active</mat-option>
+                    <mat-option value="Inactive">Inactive</mat-option>
+                    <mat-option value="Suspended">Suspended</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Phone Number</mat-label>
+                  <input matInput formControlName="phoneNumber" placeholder="Enter phone number">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="edit-dialog-actions">
+        <button mat-button (click)="closeEditDialog()">
+          <mat-icon>cancel</mat-icon>
+          Cancel
+        </button>
+        <button mat-raised-button color="primary" (click)="updateUser()" [disabled]="editUserForm.invalid">
+          <mat-icon>save</mat-icon>
+          Update User
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
